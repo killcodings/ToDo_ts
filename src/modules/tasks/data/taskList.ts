@@ -1,14 +1,7 @@
 import { Prioroty, Status } from '../types/types';
+import { Task } from '../types/task.ts';
 
-export type Task = {
-  id: string;
-  title: string;
-  priority: Prioroty;
-  status: Status;
-  progress: number;
-};
-
-export const taskList: Array<Task> = [
+export const taskList: Array<Task> = [ // taskList: Task[]
   {
     id: '01',
     title: 'Выучить React state',

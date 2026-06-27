@@ -1,5 +1,4 @@
 import './style.scss';
-// import Add from '../assets/icons/add.svg?react';
 import Add from './../../../../assets/icons/add.svg?react';
 import { AddEditTaskModal } from '../AddEditTaskModal/AddEditTaskModal';
 import { Button } from '../../../shared/ui/Button/Button';
@@ -20,7 +19,7 @@ export const TodoList = () => {
         </div>
         <div className="task-container">
           {taskList.map((task) => (
-            <TaskCard task={task} />
+            <TaskCard key={task.id} task={task} />
           ))}
         </div>
       </div>
