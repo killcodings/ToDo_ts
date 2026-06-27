@@ -1,6 +1,10 @@
 import "./style.scss"
+import {ReactNode} from "react";
 
-export const Modal = ({ children }) => {
+type Props = {
+    children: ReactNode;
+};
+export const Modal = ({ children }: Props) => {
   return (
     <div className="modal">
       <div className="modal-content">{children}</div>

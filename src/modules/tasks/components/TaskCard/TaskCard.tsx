@@ -1,17 +1,20 @@
 import classNames from 'classnames';
 import DeleteIcon from './../../../../assets/icons/delete.svg?react';
 import EditIcon from './../../../../assets/icons/edit.svg?react';
-import { CircularProgressBar } from '../../../shared/ui/CircularProgressBar/CircularProgressBar';
+import { CircularProgressBar } from '../../../../shared/ui/CircularProgressBar/CircularProgressBar';
 import './style.scss';
-import type { Task } from '../../types/task';
-import { priorityLabels } from '../../constants/priorityLabels';
-import { statusLabels } from '../../constants/statusLabels';
+import type { Task } from '../../../../shared/types/task';
+import { priorityLabels } from '../../../../shared/constants/priorityLabels';
+import { statusLabels } from '../../../../shared/constants/statusLabels';
 
 type TaskCardProps = {
     task: Task;
+    onEdit: (task: Task) => void;
+    onDelete: (task: Task) => void;
 };
 
-export const TaskCard = ({ task }: TaskCardProps) => {
+export const TaskCard = ({ task, onEdit, onDelete }: TaskCardProps) => {
+
     return (
         <div className="task-card">
             <div className="flex w-100">
@@ -37,8 +40,8 @@ export const TaskCard = ({ task }: TaskCardProps) => {
                 />
             </div>
             <div className="actions">
-                <EditIcon className="mr-20 cp" onClick={() => {}} />
-                <DeleteIcon className="cp" onClick={() => {}} />
+                <EditIcon className="mr-20 cp" onClick={() => onEdit(task)} />
+                <DeleteIcon className="cp" onClick={() => onDelete(task)} />
             </div>
         </div>
     );

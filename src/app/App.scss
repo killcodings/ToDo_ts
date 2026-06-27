@@ -1,7 +1,7 @@
-@use '../styles' as *;
-@use '../styles/reset.scss';
-@use '../styles/fonts.scss';
-@use '../styles/breakpoints.scss' as breakpoints;
+@use '../shared/styles' as *;
+@use '../shared/styles/reset.scss';
+@use '../shared/styles/fonts.scss';
+@use '../shared/styles/breakpoints.scss' as breakpoints;
 
 body {
   margin: 0;

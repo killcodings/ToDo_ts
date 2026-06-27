@@ -1,33 +1,72 @@
 import './style.scss';
 import Add from './../../../../assets/icons/add.svg?react';
 import { AddEditTaskModal } from '../AddEditTaskModal/AddEditTaskModal';
-import { Button } from '../../../shared/ui/Button/Button';
+import { Button } from '../../../../shared/ui/Button/Button';
 import { DeleteModal } from '../DeleteTaskModal/DeleteModal';
 import { TaskCard } from '../TaskCard/TaskCard';
 // import { taskList } from '../serverData/taskList';
-import { taskList } from '../../data/taskList.ts';
+// import { taskList } from '../../../../shared/data/taskList.ts';
 import {useState} from "react";
-// import type { Task } from '../../types/task';
+import type { Task } from '../../../../shared/types/task';
 // import {CreateTask} from "../../types/task.ts";
-import type { CreateTask } from "../../types/task";
-import type { Status } from "../../types/types";
+import type { CreateTask } from "../../../../shared/types/task";
+import type { Status } from "../../../../shared/types/types";
+
+import { taskApi } from '../../api/taskApi';
+
 
 export const TodoList = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [tasks, setTasks] = useState(taskList);
 
-  const handleAddTask = (task: CreateTask) => {
-    const newTask = {
-      id: Date.now().toString(),
-      status: "todo" as Status,
-      progress: 0,
-      ...task,
-    };
-    setTasks((prev) => [newTask, ...prev]);
-    setIsModalOpen(false);
+  const tasksData = taskApi.getTasks();
+
+  // const [tasks, setTasks] = useState(taskList);
+
+  const [tasks, setTasks] = useState<Task[]>(tasksData);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+
+  const [deleteTaskId, setDeleteTaskId] = useState<string | null>(null);
+
+  const handleDeleteClose = () => {
+    setDeleteTaskId(null)
+  }
+
+  const handleDeleteClick = (task: Task) => {
+    setDeleteTaskId(task.id);
   };
 
-  const showDeleteModal = false;
+  const handleDeleteConfirm = () => {
+    console.log(deleteTaskId)
+    setTasks((prev) =>
+        prev.filter((t) => t.id !== deleteTaskId)
+    );
+    setDeleteTaskId(null);
+  }
+  const handleAddTask = (task: CreateTask) => {
+    if (editingTask) {
+      setTasks((prev) =>
+          prev.map((t) =>
+              t.id === editingTask.id ? { ...t, ...task } : t));
+    } else {
+      const newTask = {
+        id: Date.now().toString(),
+        status: "todo" as Status,
+        progress: 0,
+        ...task,
+      };
+      setTasks((prev) => [newTask, ...prev]);
+    }
+
+    setIsModalOpen(false);
+    setEditingTask(null);
+  };
+
+  const handleEdit = (task: Task) => {
+    setEditingTask(task);
+    setIsModalOpen(true);
+  };
   return (
     <>
       <div className="page-wrapper">
@@ -37,17 +76,32 @@ export const TodoList = () => {
         </div>
         <div className="task-container">
           {tasks.map((task) => (
-            <TaskCard key={task.id} task={task} />
+            <TaskCard
+                key={task.id}
+                task={task}
+                onEdit={handleEdit}
+                onDelete={(task) => handleDeleteClick(task)}
+            />
           ))}
         </div>
       </div>
+
       {isModalOpen && (
           <AddEditTaskModal
-              onClose={() => setIsModalOpen(false)}
-              onAdd={handleAddTask}
-          />
-      )}
-      {showDeleteModal && <DeleteModal />}
+              mode={editingTask ? "edit" : "create"}
+              task={editingTask ?? undefined}
+              onClose={() => {
+                setIsModalOpen(false);
+                setEditingTask(null);
+              }}
+              onAdd={(task) => handleAddTask(task)} // позже разделим add/update
+          />)}
+
+      {deleteTaskId && (
+          <DeleteModal
+              onClose={handleDeleteClose}
+              onDelete={handleDeleteConfirm}
+          />)}
     </>
   );
 };
