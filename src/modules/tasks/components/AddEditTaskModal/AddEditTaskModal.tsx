@@ -4,39 +4,65 @@ import { Button } from '../../../shared/ui/Button/Button';
 import { Input } from '../../../shared/ui/Input/Input';
 import { Modal } from '../../../shared/ui/Modal/Modal';
 import './style.scss';
+import {useState} from "react";
+import {PriorityVariant} from "../../types/task.ts";
 
 
-export const AddEditTaskModal = () => {
+type Props = {
+  onClose: () => void;
+  onAdd: (task: { title: string, priority: PriorityVariant }) => void;
+};
+
+export const AddEditTaskModal = ({ onClose, onAdd }: Props) => {
+  const [title, setTitle] = useState("");
+  const [priority, setPriority] = useState<PriorityVariant>("high");
+
+  const priorities = ["high", "medium", "low"] as const;
+
+  const handleSubmit = () => {
+    onAdd({
+      title,
+      priority,
+    });
+
+    onClose();
+  };
   return (
     <Modal>
       <form>
         <div className="add-edit-modal">
           <div className="flx-between">
             <span className="modal-title">Добавить задачу</span>
-            <Close className="cp" onClick={() => {}} />
+            <Close className="cp" onClick={onClose} />
           </div>
           <Input
             label="Задача"
             placeholder="Введите текст.."
-            onChange={() => {}}
+            onChange={(e) => setTitle(e.target.value)}
             name="title"
-            value=""
+            value={title}
           />
           <div className="modal-priority">
             <span>Приортитет</span>
             <ul className="priority-buttons">
-              {['high', 'medium', 'low'].map((priority) => (
-                <li
-                  key={priority}
-                  className={classNames(`${priority}-selected`, priority)}
-                >
-                  {priority}
-                </li>
+              {priorities.map((p) => (
+                  <li
+                      key={p}
+                      onClick={() => setPriority(p)}
+                      className={classNames(
+                          p,
+                          {
+                            [`${p}-selected`]: priority === p,
+                          }
+                      )}
+                  >
+                    {p}
+                  </li>
               ))}
             </ul>
           </div>
           <div className="flx-right mt-50">
-            <Button title="Добавить" onClick={() => {}} />
+            <Button title="Добавить" onClick={handleSubmit} />
           </div>
         </div>
       </form>
