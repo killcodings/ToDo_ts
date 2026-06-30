@@ -10,7 +10,7 @@ import {useState} from "react";
 import type { Task } from '../../../../shared/types/task';
 // import {CreateTask} from "../../types/task.ts";
 import type { CreateTask } from "../../../../shared/types/task";
-import type { Status } from "../../../../shared/types/types";
+import { Status } from "../../../../shared/types/types";
 
 import { taskApi } from '../../api/taskApi';
 
@@ -67,6 +67,27 @@ export const TodoList = () => {
     setEditingTask(task);
     setIsModalOpen(true);
   };
+
+  const handleStatusChange = (task: Task) => {
+    const nextStatus =
+        task.status === Status.TODO ? Status.PROGRESS
+            : task.status === Status.PROGRESS ? Status.DONE : Status.TODO;
+
+    const nextProgress =
+        nextStatus === Status.TODO ? 0 : nextStatus === Status.PROGRESS ? 50 : 100;
+
+    setTasks(prev =>
+        prev.map(t =>
+            t.id === task.id
+                ? {
+                  ...t,
+                  status: nextStatus,
+                  progress: nextProgress,
+                }
+                : t
+        )
+    );
+  };
   return (
     <>
       <div className="page-wrapper">
@@ -80,6 +101,7 @@ export const TodoList = () => {
                 key={task.id}
                 task={task}
                 onEdit={handleEdit}
+                onStatusChange={handleStatusChange}
                 onDelete={(task) => handleDeleteClick(task)}
             />
           ))}

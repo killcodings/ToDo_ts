@@ -79,7 +79,11 @@ export const AddEditTaskModal = ({ mode, task, onClose, onAdd }: Props) => {
             </ul>
           </div>
           <div className="flx-right mt-50">
-            <Button title={mode === "edit" ? "Редактировать" : "Добавить"} onClick={() => handleSubmit()} />
+            <Button
+                title={mode === "edit" ? "Редактировать" : "Добавить"}
+                onClick={() => handleSubmit()}
+                disabled={!title.trim()}
+            />
           </div>
         </div>
       </form>

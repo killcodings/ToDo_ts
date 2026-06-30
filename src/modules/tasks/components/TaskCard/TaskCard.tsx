@@ -11,9 +11,10 @@ type TaskCardProps = {
     task: Task;
     onEdit: (task: Task) => void;
     onDelete: (task: Task) => void;
+    onStatusChange: (task: Task) => void;
 };
 
-export const TaskCard = ({ task, onEdit, onDelete }: TaskCardProps) => {
+export const TaskCard = ({ task, onEdit, onDelete, onStatusChange }: TaskCardProps) => {
 
     return (
         <div className="task-card">
@@ -28,7 +29,10 @@ export const TaskCard = ({ task, onEdit, onDelete }: TaskCardProps) => {
         </span>
             </div>
             <div className="task-status-wrapper">
-                <button className={classNames(`status--${task.status}`, 'status')}>
+                <button
+                    className={classNames(`status--${task.status}`, 'status')}
+                    onClick={() => onStatusChange(task)}
+                >
                     {statusLabels[task.status]}
                 </button>
             </div>

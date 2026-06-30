@@ -1,0 +1,34 @@
+
+
+TaskCard
+   ↓ onEdit(task)
+TodoList
+   ↓ setEditingTask(task)
+Modal
+   ↓ task -> form state
+Submit
+   ↓ update OR create
+
+
+Если хочешь следующий шаг (очень рекомендую)
+Я могу тебе дальше улучшить это до уровня:
+🔥 1. useTaskForm hook
+🔥 2. useTasks reducer (без useState хаоса)
+🔥 3. optimistic update + undo delete
+🔥 4. нормальная архитектура feature-sliced
+
+
+Если хочешь следующий шаг
+Я могу помочь тебе сделать:
+🔥 идеальную архитектуру:
+useTaskForm() хук
+upsertTask() вместо add/edit
+обновление массива без багов
+нормальный edit по id
+
+как сделать один универсальный useModal() хук
+чтобы у тебя не было isModalOpen, deleteTaskId, editingTask отдельно — это следующий уровень архитектуры React 👍
+
+
+При клике на иконку удаления должно открываться модальное окно с подтверждением удаления:
+При клике по кнопке «Удалить» модальное окно должно закрыться, а задача удалиться из списка.
